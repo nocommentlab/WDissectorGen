@@ -1,0 +1,52 @@
+---
+connection:
+   type: udp
+   ports: [8888]
+protocol:
+   name: myprotocol
+fields:
+   - name: sequence_counter
+     type: uint32 
+     filter: myprotocol.sequence_counter_field
+     short_description: Sequence Counter
+     base: DEC
+     offset: 0
+     size: 4
+
+   - name: type
+     type: uint16
+     filter: myprotocol.type_field
+     short_description: Type
+     base: HEX
+     offset: 4
+     size: 2
+   
+   - name: checksum
+     type: uint8
+     filter: myprotocol.checksum_field
+     short_description: Checksum
+     base: HEX
+     offset: 6
+     size: 1
+
+   - name: name
+     type: string
+     filter: myprotocol.name_field
+     short_description: Name
+     base: NONE
+     offset: 7
+     size: 7
+     function_name: hide_vocals
+     function: | 
+               function hide_vocals(value)
+                  local edited = value:bytes()
+                  local converted = ""
+                  edited:set_index(0,0x21)
+                  edited:set_index(3,0x21)
+                  edited:set_index(5,0x21)
+                  edited:set_index(6,0x21)
+                  for i=0,6 do 
+                     converted = converted .. string.char(edited:get_index(i)) 
+                  end
+                  return converted
+               end

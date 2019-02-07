@@ -1,0 +1,19 @@
+connection:
+   type: enum('udp','tcp', required=True)
+   ports: list(num(1,65535), required=True)
+protocol:
+   name: str(required=True)
+fields: list(include('field'), min=1)
+
+---
+field:
+   name: str(required=True)
+   type:  enum('uint8','uint16','uint24','uint32','uint64','int8','int16','int24','int32','int64','framenum','bool','absolute_time','relative_time','float','double','string','stringz','bytes','ubytes','none','ipv4','ipv6','ether','guid','oid','protocol','rel_oid','systemid','eui64')
+   filter: str(required=True)
+   short_description: str(required=True)
+   base: enum('NONE', 'DEC', 'HEX', 'OCT', 'DEC_HEX', 'HEX_DEC', 'UNIT_STRING', 'RANGE_STRING', required=True)
+   offset: num(required=True)
+   size: num(required=True)
+   function_name: str(required=False)
+   function: str(required=False)
+

@@ -1,0 +1,38 @@
+--[[
+    Author: WDissectorGen
+    Language: Lua
+    Date: %DATE%
+    Description: Wireshark Dissector for %PROTOCOL_NAME%
+]]--
+
+%PROTOCOL_NAME% = Proto("%PROTOCOL_NAME%", "%PROTOCOL_DESCRIPTION% Protocol")
+
+-- Fields Declaration Section
+%FIELDS_DECLARATION%
+
+%PROTOCOL_NAME%.fields = {
+    %FIELDS_LIST%
+}
+
+-- Dissector Callback Declaration
+function %PROTOCOL_NAME%.dissector(buffer, pinfo, tree)
+    length = buffer:len()
+    if length == 0 then return end
+
+    -- Adds protocol name to protocol column
+    pinfo.cols.protocol = %PROTOCOL_NAME%.name
+    
+    -- Creates the subtree
+    local subtree = tree:add(%PROTOCOL_NAME%, buffer(),"%PROTOCOL_NAME% Protocol Data")
+
+    -- Local Variables Declaration
+    %LOCAL_VAR_DECLARATION%
+
+    -- Adds Variables to the subtree
+    %SUBTREE_POPULATION%
+end
+
+%CUSTOM_FUNCTIONS%
+
+local %PROTOCOL%_port = DissectorTable.get("%PROTOCOL%.port")
+%PORTS%
